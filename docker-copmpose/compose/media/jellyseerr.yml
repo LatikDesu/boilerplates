@@ -1,0 +1,19 @@
+services:
+  # Jellyseerr - Media Storage management
+  jellyseerr:
+    security_opt:
+      - no-new-privileges:true
+    restart: "no"
+    image: fallenbagel/jellyseerr:latest 
+    container_name: jellyseerr
+    network_mode: "service:gluetun"
+    depends_on:
+      - gluetun
+    volumes:
+      - $DOCKERDIR/appdata/jellyseerr/config:/app/config
+      - "/etc/localtime:/etc/localtime:ro"
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      PGID: $PGID
+      LOG_LEVEL: debug

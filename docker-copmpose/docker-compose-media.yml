@@ -1,0 +1,42 @@
+########################### NETWORKS
+networks:
+  primary-network:
+    ipam:
+      config:
+        - subnet: 172.10.0.0/16
+  socket_proxy:
+    name: socket_proxy
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.91.0/24
+
+########################### SECRETS
+
+include:
+  ########################### SERVICES
+  # HOSTNAME=media - defined in .env
+
+  # CORE
+  - compose/$HOSTNAME/socket-proxy.yml
+  - compose/$HOSTNAME/portainer.yml
+  - compose/$HOSTNAME/dozzle.yml
+  - compose/$HOSTNAME/gluetun.yml
+  # # Media host
+  - compose/$HOSTNAME/jellyfin.yml
+  # DOWNLOADERS
+  - compose/$HOSTNAME/qbittorrent.yml
+  # PVRS
+  - compose/$HOSTNAME/prowlarr.yml
+  - compose/$HOSTNAME/radarr.yml
+  - compose/$HOSTNAME/sonarr.yml
+  - compose/$HOSTNAME/jellyseerr.yml
+  # COMPLEMENTARY APPS
+  
+  # MAINTENANCE
+  - compose/$HOSTNAME/cadvisor.yml
+  - compose/$HOSTNAME/watchtower.yml
+  - compose/$HOSTNAME/docker-gc.yml
+
+  # - compose/$HOSTNAME/jackett.yml
+  # - compose/$HOSTNAME/jellyfin-vue.yml

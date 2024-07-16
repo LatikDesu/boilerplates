@@ -1,0 +1,26 @@
+services:
+  # qBittorrent - Torrent downloader
+  qbittorrent:
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    networks:
+      primary-network:
+        ipv4_address: 172.10.0.200
+    ports:
+      - "8080:8080"
+    # network_mode: "service:gluetun"
+    volumes:
+      - $DOCKERDIR/appdata/qbittorrent:/config
+      - $DATADIR/Downloads/torrent-data:/downloads
+      - $DATADIR/Downloads/torrent-black-hole:/watch
+      - "/etc/localtime:/etc/localtime:ro"
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      PGID: $PGID
+      UMASK_SET: 002
+      DOCKER_MODS: ghcr.io/gabe565/linuxserver-mod-vuetorrent
+      

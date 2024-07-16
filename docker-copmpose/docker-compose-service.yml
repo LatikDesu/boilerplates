@@ -1,0 +1,50 @@
+########################### NETWORKS
+networks:
+  default:
+    driver: bridge
+  socket_proxy:
+    name: socket_proxy
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.91.0/24
+  t3_proxy:
+    name: t3_proxy
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.90.0/24
+
+########################### SECRETS
+secrets:
+  basic_auth_credentials:
+    file: $DOCKERDIR/secrets/basic_auth_credentials
+  cf_dns_api_token:
+    file: $DOCKERDIR/secrets/cf_dns_api_token
+
+include:
+  ########################### SERVICES
+  # HOSTNAME=service - defined in .env
+
+  # CORE
+  - compose/$HOSTNAME/socket-proxy.yml
+  - compose/$HOSTNAME/traefik.yml
+  - compose/$HOSTNAME/portainer.yml
+  - compose/$HOSTNAME/dozzle.yml
+  - compose/$HOSTNAME/homepage.yml
+  # MONITORING
+  - compose/$HOSTNAME/uptime-kuma.yml
+  - compose/$HOSTNAME/grafana.yml
+  - compose/$HOSTNAME/cloudbeaver.yml
+  # DATABASES
+  - compose/$HOSTNAME/mariadb.yml
+  - compose/$HOSTNAME/postgres.yml
+  - compose/$HOSTNAME/influxdb.yml
+  - compose/$HOSTNAME/prometheus.yml
+    # GUACAMOLE
+  - compose/$HOSTNAME/guacd.yml
+  - compose/$HOSTNAME/guacamole.yml
+  # MAINTENANCE
+  - compose/$HOSTNAME/cadvisor.yml
+  - compose/$HOSTNAME/watchtower.yml
+  - compose/$HOSTNAME/docker-gc.yml

@@ -1,0 +1,17 @@
+services:
+  # Jellyfin - WebUI
+  jf-vue:
+    image: jellyfin/jellyfin-vue:unstable.2024-05-16.64983ee
+    container_name: jellyfin-vue-client
+    security_opt:
+      - no-new-privileges:true
+    restart: "no"
+    ports:
+      - "8097:80"
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      PGID: $PGID
+      DEFAULT_SERVERS: jellyfin:8096
+    networks:
+      - primary-network

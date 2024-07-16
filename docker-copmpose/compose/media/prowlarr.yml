@@ -1,0 +1,19 @@
+services:
+  # Prowlarr - Torrent proxy
+  prowlarr:
+    image: ghcr.io/linuxserver/prowlarr:develop
+    container_name: prowlarr
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    network_mode: "service:gluetun"
+    depends_on:
+      - gluetun
+    volumes:
+      - $DOCKERDIR/appdata/prowlarr:/config
+      - $DATADIR/Downloads/torrent-black-hole:/downloads
+      - "/etc/localtime:/etc/localtime:ro"
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      PGID: $PGID

@@ -1,0 +1,44 @@
+# Gluetun - VPN Client for Docker Containers and More
+services:
+  gluetun:
+    security_opt:
+    - no-new-privileges:true
+    restart: unless-stopped
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    hostname: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    ports:
+      - 8888:8000/tcp # HTTP proxy
+      - 8388:8388/tcp # Shadowsocks
+      - 8388:8388/udp # Shadowsocks
+      - "5055:5055" # Jellyseerr
+      - "9117:9117" # Jackett
+      - "9696:9696" # Prowlarr
+      - "7878:7878" # Radarr
+      - "8989:8989" # Sonarr
+      # - "8080:8080" # qbittorrent
+      # - "6767:6767" # Bazarr
+    volumes:
+      - $DOCKERDIR/appdata/gluetun:/gluetun
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      PGID: $PGID
+      VPN_SERVICE_PROVIDER: custom
+      VPN_TYPE: wireguard
+      VPN_ENDPOINT_IP: $VPN_ENDPOINT_IP
+      VPN_ENDPOINT_PORT: $VPN_ENDPOINT_PORT
+      WIREGUARD_PUBLIC_KEY: $WIREGUARD_PUBLIC_KEY
+      WIREGUARD_PRIVATE_KEY: $WIREGUARD_PRIVATE_KEY
+      WIREGUARD_PRESHARED_KEY: $WIREGUARD_PRESHARED_KEY
+      WIREGUARD_ADDRESSES: $WIREGUARD_ADDRESSES
+      FIREWALL_OUTBOUND_SUBNETS: "172.10.0.0/16"
+    extra_hosts:
+      - "jellyfin:172.10.0.100"
+      - "qbittorrent:172.10.0.200"
+    networks:
+      - primary-network
