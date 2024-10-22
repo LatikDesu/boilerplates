@@ -1,0 +1,19 @@
+services:
+  # Dockge - Docker Compose Manager
+  dockge:
+    image: louislam/dockge
+    container_name: dockge
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    networks:
+      - socket_proxy
+      - primary-network
+    volumes:
+      - $DOCKERDIR/appdata/dockge:/app/data
+      - $DOCKERDIR:/opt/stacks/main
+    environment:
+      - DOCKGE_STACKS_DIR=/opt/stacks
+      - DOCKER_HOST=tcp://socket-proxy:2375
